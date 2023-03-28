@@ -1,8 +1,12 @@
 package br.senai.sc.wishlistapi.service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.senai.sc.wishlistapi.controller.dto.PasswordDTO;
 import br.senai.sc.wishlistapi.exception.RulesException;
 import br.senai.sc.wishlistapi.model.entity.User;
 import br.senai.sc.wishlistapi.model.repository.UserRepository;
@@ -29,18 +33,73 @@ public class UserService {
 		return repository.save(user);
 	}
 
-	public User auth(String email, String password) throws RulesException {
-		User user = repository.findByEmail(email);
-		if (user == null) {
+	public Optional<User> auth(String email, String password) throws RulesException {
+		Optional<User> user = repository.findByEmail(email);
+		if (!user.isPresent()) {
 			throw new RulesException("Incorrect email/password");
 		}
 		
-		if (!user.getPassword().equals(password)) {
+		if (!user.get().getPassword().equals(password)) {
 			throw new RulesException("Incorrect email/password");
 		}
 		
-		user.setPassword(null);
 		return user;
+	}
+	
+	public Optional<User> findById(UUID id) throws RulesException {
+		Optional<User> user = repository.findById(id);
+		if (!user.isPresent()) {
+			throw new RulesException("User not found.");
+		}
+		
+		return user;
+	}
+	
+	public User update(UUID id, User u) throws RulesException {
+		Optional<User> user = repository.findById(id);
+		if (!user.isPresent()) {
+			throw new RulesException("User not found.");
+		}
+		
+		if (!validateName(u.getName())) {
+			throw new RulesException("Invalid name.");
+		}
+
+		if (validateEmail(u.getEmail())) {
+			throw new RulesException("Email already registered.");
+		}
+		
+		user.get().setName(u.getName());
+		user.get().setEmail(u.getEmail());
+		user.get().setBirthdate(u.getBirthdate());
+		return repository.save(user.get());
+	}
+	
+	public void changePassword(UUID id, PasswordDTO dto) throws RulesException {
+		Optional<User> user = repository.findById(id);
+		if (!user.isPresent()) {
+			throw new RulesException("User not found.");
+		}
+		
+		if (!user.get().getPassword().equals(dto.getOldPassword())) {
+			throw new RulesException("Old password is incorrect.");
+		}
+		
+		if (!dto.getNewPassword().equals(dto.getPasswordConfirmation())) {
+			throw new RulesException("The new password and its confirmation do not match.");
+		}
+			
+		user.get().setPassword(dto.getNewPassword());
+		repository.save(user.get());
+	}
+	
+	public void delete(UUID id) throws RulesException {
+		Optional<User> user = repository.findById(id);
+		if (!user.isPresent()) {
+			throw new RulesException("User not found.");
+		}
+		
+		repository.delete(user.get());
 	}
 
 	private boolean validateName(String name) {
@@ -60,4 +119,5 @@ public class UserService {
 		else
 			return true;
 	}
+
 }
