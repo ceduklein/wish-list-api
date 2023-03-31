@@ -16,10 +16,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Entity
-@Table(name = "list")
-public class List {
+@Table(name = "wish_list")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class WishList {
 
 	@Id
 	@Column(name = "id", updatable = false, unique = true, nullable = false)

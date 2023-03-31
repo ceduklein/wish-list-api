@@ -43,3 +43,31 @@
 * **Delete User - DEL** `/users/{id}`
 
 ### **Lists**
+
+* **Create List - POST** `/lists`
+```
+{
+	"title": "Título Lista",
+	"items": ["item 1", "item 2", "item 3"],
+	"user_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+```
+* **Update List - PUT** `/lists/{id}`
+```
+{
+	"title": "Título Lista Atualizado",
+	"items": ["item 1", "item 2"],
+	"user_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+```
+* **Change Status - PATCH** `/lists/change-status/{id}`
+* **Get List By Id - GET** `/lists/{id}`
+* **Get Lists By User - GET** `/lists?user_id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+* **Delete List - DEL** `/lists/{id}`
+
+## Preparação do ambiente
+* JDK 17
+* Maven
+* PostgresSQL
+
+Após clonar o repositório, rodar o comando `mvn clean install` para instalar todas as dependências necessárias para rodar a api.
