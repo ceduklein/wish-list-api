@@ -70,4 +70,4 @@
 * Maven
 * PostgresSQL
 
-Após clonar o repositório, rodar o comando `mvn clean install` para instalar todas as dependências necessárias para rodar a api.
+Após clonar o repositório, rodar o comando `mvn clean install` para instalar todas as dependências necessárias.
