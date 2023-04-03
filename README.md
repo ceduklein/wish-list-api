@@ -14,13 +14,20 @@
 
 ### **Users**
 
-* **Create User - POST** `/users`
+* **Create User - POST** `/users/signup`
 ```
 {
   "name": "Nome Usuário",
   "email": "usuario@email.com",
   "birthdate": "1986-03-07",
   "password": "senha"
+}
+```
+* **Authenticate User - POST** `/users/signin`
+```
+{
+	"email": "usuario@email.com",
+	"password": "senha"
 }
 ```
 * **Update User - PUT** `/users/{id}`
