@@ -20,15 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 import br.senai.sc.wishlistapi.controller.dto.WishListDTO;
 import br.senai.sc.wishlistapi.model.entity.WishList;
 import br.senai.sc.wishlistapi.service.WishListService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/lists")
+@Tag(name = "Lists")
 public class WishListController {
 
 	@Autowired 
 	private WishListService service;
 	
 	@PostMapping
+	@Operation(summary = "Create List")
 	public ResponseEntity<?> createList(@RequestBody WishListDTO wl) {
 		try {
 			WishList savedList =  service.save(wl);
@@ -39,6 +43,7 @@ public class WishListController {
 	}
 	
 	@PutMapping("{id}")
+	@Operation(summary = "Update List")
 	public ResponseEntity<?> createList(@PathVariable("id") UUID id, @RequestBody WishListDTO wl) {
 		try {
 			WishList updatedList =  service.update(wl, id);
@@ -49,6 +54,7 @@ public class WishListController {
 	}
 	
 	@PatchMapping("/change-status/{id}")
+	@Operation(summary = "Change List Status")
 	public ResponseEntity<?> changeStatus(@PathVariable("id") UUID id) {
 		try {
 			WishList updatedList =  service.changeStatus(id);
@@ -58,7 +64,19 @@ public class WishListController {
 		}
 	}
 	
+	@GetMapping("/all")
+	@Operation(summary = "Get All Lists")
+	public ResponseEntity<?> getLists() {
+		try {
+			List<WishList> lists =  service.findAll();
+			return new ResponseEntity<>(lists, HttpStatus.OK);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage()); 
+		}
+	}
+	
 	@GetMapping("{id}")
+	@Operation(summary = "Get List By Id")
 	public ResponseEntity<?> getListById(@PathVariable("id") UUID id) {
 		try {
 			WishList list =  service.findById(id);
@@ -69,6 +87,7 @@ public class WishListController {
 	}
 	
 	@GetMapping()
+	@Operation(summary = "Get List By User")
 	public ResponseEntity<?> getListsByUser(@RequestParam UUID user_id) {
 		try {
 			List<WishList> lists =  service.getListsByUser(user_id);
@@ -79,6 +98,7 @@ public class WishListController {
 	}
 	
 	@DeleteMapping("{id}")
+	@Operation(summary = "Delete List")
 	public ResponseEntity<?> deleteList(@PathVariable UUID id) {
 		try {
 			service.delete(id);

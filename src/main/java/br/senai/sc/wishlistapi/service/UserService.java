@@ -1,5 +1,6 @@
 package br.senai.sc.wishlistapi.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.senai.sc.wishlistapi.controller.dto.PasswordDTO;
+import br.senai.sc.wishlistapi.controller.dto.UserDTO;
 import br.senai.sc.wishlistapi.exception.RulesException;
 import br.senai.sc.wishlistapi.model.entity.User;
 import br.senai.sc.wishlistapi.model.repository.UserRepository;
@@ -17,7 +19,7 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 
-	public User save(User user) throws RulesException {
+	public User save(UserDTO user) throws RulesException {
 		if (!validateName(user.getName())) {
 			throw new RulesException("Invalid name.");
 		}
@@ -29,8 +31,14 @@ public class UserService {
 		if (!validatePassword(user.getPassword())) {
 			throw new RulesException("Password must have at least 4 characters.");
 		}
+		
+		User savedUser = new User();
+		savedUser.setName(user.getName());
+		savedUser.setBirthdate(user.getBirthdate());
+		savedUser.setEmail(user.getEmail());
+		savedUser.setPassword(user.getPassword());
 
-		return repository.save(user);
+		return repository.save(savedUser);
 	}
 
 	public Optional<User> auth(String email, String password) throws RulesException {
@@ -46,6 +54,14 @@ public class UserService {
 		return user;
 	}
 	
+	public List<User> findAll() throws RulesException {
+		List<User> users = repository.findAll();
+		if (users.isEmpty()) {
+			throw new RulesException("No users were found.");
+		}
+		return users;
+	}
+	
 	public Optional<User> findById(UUID id) throws RulesException {
 		Optional<User> user = repository.findById(id);
 		if (!user.isPresent()) {
@@ -55,7 +71,7 @@ public class UserService {
 		return user;
 	}
 	
-	public User update(UUID id, User u) throws RulesException {
+	public User update(UUID id, UserDTO u) throws RulesException {
 		Optional<User> user = repository.findById(id);
 		if (!user.isPresent()) {
 			throw new RulesException("User not found.");
@@ -65,12 +81,7 @@ public class UserService {
 			throw new RulesException("Invalid name.");
 		}
 
-		if (validateEmail(u.getEmail())) {
-			throw new RulesException("Email already registered.");
-		}
-		
 		user.get().setName(u.getName());
-		user.get().setEmail(u.getEmail());
 		user.get().setBirthdate(u.getBirthdate());
 		return repository.save(user.get());
 	}

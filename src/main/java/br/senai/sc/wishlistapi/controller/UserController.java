@@ -1,5 +1,6 @@
 package br.senai.sc.wishlistapi.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,18 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.senai.sc.wishlistapi.controller.dto.AuthRequestDTO;
 import br.senai.sc.wishlistapi.controller.dto.PasswordDTO;
+import br.senai.sc.wishlistapi.controller.dto.UserDTO;
 import br.senai.sc.wishlistapi.model.entity.User;
 import br.senai.sc.wishlistapi.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "Users")
 public class UserController {
 	
 	@Autowired
 	private UserService service;
 	
 	@PostMapping("/signup")
-	public ResponseEntity<?> createUser(@RequestBody User user) {
+	@Operation(summary = "Create User")
+	public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
 		try {
 			User savedUser = service.save(user);
 			return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
@@ -39,6 +45,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/signin")
+	@Operation(summary = "Authenticate User")
 	public ResponseEntity<?> authenticateUser(@RequestBody AuthRequestDTO dto ) {
 		try {
 			Optional<User> user = service.auth(dto.getEmail(), dto.getPassword());
@@ -48,7 +55,19 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping
+	@Operation(summary = "Get All Users")
+	public ResponseEntity<?> getUsers() {
+		try {
+			List<User> users = service.findAll();
+			return ResponseEntity.ok(users);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
 	@GetMapping("{id}")
+	@Operation(summary = "Get User By Id")
 	public ResponseEntity<?> getUserById(@PathVariable("id") UUID id) {
 		try {
 			Optional<User> user = service.findById(id);
@@ -59,7 +78,8 @@ public class UserController {
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<?> updateUser(@PathVariable("id") UUID id, @RequestBody User user) {
+	@Operation(summary = "Update User")
+	public ResponseEntity<?> updateUser(@PathVariable("id") UUID id, @RequestBody UserDTO user) {
 		try {
 			User updatedUser = service.update(id, user);
 			return ResponseEntity.ok(updatedUser);
@@ -69,6 +89,7 @@ public class UserController {
 	}
 	
 	@PatchMapping("/change-password/{id}")
+	@Operation(summary = "Change Password")
 	public ResponseEntity<?> changePassword(@PathVariable("id") UUID id, @RequestBody PasswordDTO dto) {
 		try {
 			service.changePassword(id, dto);
@@ -79,6 +100,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("{id}")
+	@Operation(summary = "Delete User")
 	public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id) {
 		try {
 			service.delete(id);

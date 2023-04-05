@@ -70,6 +70,14 @@ public class WishListService {
 		return repository.save(updatedList.get());
 	}
 	
+	public List<WishList> findAll() throws RulesException {
+		List<WishList> lists = repository.findAll();
+		if (lists.isEmpty()) {
+			throw new RulesException("No lists were found.");
+		}
+		return lists;
+	}
+	
 	public WishList findById(UUID id) throws RulesException {
 		Optional<WishList> list = repository.findById(id);
 		if (!list.isPresent()) {
