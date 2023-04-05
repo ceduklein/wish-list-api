@@ -9,72 +9,15 @@
 4. O sistema deve permitir a exclusão destas listas
 5. O sistema deve controlar o status das listas (Concluída ou Pendente)
 
-## **Routes**
-`http://localhost:8080/api`
-
-### **Users**
-
-* **Create User - POST** `/users/signup`
-```
-{
-  "name": "Nome Usuário",
-  "email": "usuario@email.com",
-  "birthdate": "1986-03-07",
-  "password": "senha"
-}
-```
-* **Authenticate User - POST** `/users/signin`
-```
-{
-	"email": "usuario@email.com",
-	"password": "senha"
-}
-```
-* **Update User - PUT** `/users/{id}`
-```
-{
-	"name": "Nome Usuário Alterado",
-	"email": "usuario@email.com",
-	"birthdate": "1985-03-07"
-}
-```
-* **Change Password - PATCH** `/users/change-password/{id}`
-```
-{
-	"oldPassword": "senha",
-	"newPassword": "novasenha",
-	"passwordConfirmation": "novasenha"
-}
-```
-* **Find User By Id - GET** `/users/{id}`
-* **Delete User - DEL** `/users/{id}`
-
-### **Lists**
-
-* **Create List - POST** `/lists`
-```
-{
-	"title": "Título Lista",
-	"items": ["item 1", "item 2", "item 3"],
-	"user_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-}
-```
-* **Update List - PUT** `/lists/{id}`
-```
-{
-	"title": "Título Lista Atualizado",
-	"items": ["item 1", "item 2"],
-	"user_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-}
-```
-* **Change Status - PATCH** `/lists/change-status/{id}`
-* **Get List By Id - GET** `/lists/{id}`
-* **Get Lists By User - GET** `/lists?user_id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
-* **Delete List - DEL** `/lists/{id}`
-
 ## Preparação do ambiente
 * JDK 17
 * Maven
 * PostgresSQL
 
-Após clonar o repositório, rodar o comando `mvn clean install` para instalar todas as dependências necessárias.
+* Após clonar o repositório, executar o comando `mvn clean install` para instalar todas as dependências necessárias.
+* Executar `mvn spring-boot:run` para rodar a api em ambiente local.
+  
+## **Documentaçao da api**
+
+No caminho abaixo está disponível a documentação da api com todos os endpoints disponíveis.
+`http://localhost:8080/swagger-ui/index.html`
