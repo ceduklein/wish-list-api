@@ -18,5 +18,5 @@ Após clonar o repositório, rodar o comando `mvn clean install` para instalar t
 
 ## **Documentaçao da api**
 
-No caminho abaixo está disponível a documentação da api com todos os endpoints disponíveis.
+No caminho abaixo está disponível a documentação da api com todos os endpoints.
 `http://localhost:8080/swagger-ui/index.html`
