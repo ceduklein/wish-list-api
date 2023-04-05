@@ -14,10 +14,9 @@
 * Maven
 * PostgresSQL
 
-* Após clonar o repositório, executar o comando `mvn clean install` para instalar todas as dependências necessárias.
-* Executar `mvn spring-boot:run` para rodar a api em ambiente local.
-  
+Após clonar o repositório, rodar o comando `mvn clean install` para instalar todas as dependências necessárias.
+
 ## **Documentaçao da api**
 
-No caminho abaixo está disponível a documentação da api com todos os endpoints.
+No caminho abaixo está disponível a documentação da api com todos os endpoints disponíveis.
 `http://localhost:8080/swagger-ui/index.html`
